@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SVG Web Application</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CHANGE ME">
+    <meta name="keywords" content="CHANGE ME">
+    <meta name="author" content="CHANGE ME">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+
+<body>
+    <h2>SVG Image Web App</h2>
+
+    <br>
+    <h8>Sign in to your database on the dursley server</h8>
+    <form ref='loginForm' id='loginForm'>
+        <div class="form-group">
+            <label for="usernameEntry">Username:</label>
+            <input type="text"  class="form-control" id="usernameEntry" placeholder="Enter text here" maxlength="10">
+            <label for="passwordEntry">Password:</label>
+            <input type="password"  class="form-control" id="passwordEntry" placeholder="Enter text here">
+            <label for="dbEntry">Database name:</label>
+            <input type="text"  class="form-control" id="dbEntry" placeholder="Enter text here" maxlength="10">
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Log in to database">
+        </div>
+    </form>
+
+    <br>
+    <h5>File Log Panel</h5>
+    <div class="fileLogPanel"> 
+        <table id="fileLog" style="width:100%" border="1">
+            <tr>
+                <th>Image (click to download)</th>
+                <th>File name (click to download)</th> 
+                <th>File size</th>
+                <th>Number of rectangles</th>
+                <th>Number of circles</th>
+                <th>Number of paths</th>
+                <th>Number of groups</th>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Upload form -->
+    <div>
+        <form method="post" action="upload/" enctype="multipart/form-data">
+            <label for="fileChoose">Choose file to be uploaded</label>
+            <input name="uploadFile" type="file">
+            <input type="submit" value="Submit file to be uploaded">
+        </form>
+    </div>
+
+    <!-- make a form like titleform so that you can add a submit function -->
+    <form id='store_files_form'>
+        <input id="store_files" type="submit" value="Store all files into database" name="submit" />
+    </form>
+    <br>
+    
+    <!-- SVG Image dropdown menu -->
+    <h5>SVG View Panel</h5>
+    <form method="" action="" name="svgDrop">
+        Select SVG image to be displayed:
+        <select id="switch" onchange="switchImage()">
+            <option> </option>
+        </select>
+    </form>
+    
+    <!--table representing SVG View Panel-->
+    <table id="svgView" style="width:100%" border="1">
+        <thead>
+            <tr>
+                <th colspan = "3">
+                    <img src="" style="width:800px" id="myImage"> <!-- 800 px wide? -->
+                </th>
+            </tr>
+            <tr>
+                <th>Title</th> 
+                <th colspan = "2">Description</th>
+            </tr>
+            <tr>
+                <td>
+                    <div id ="title">
+                    </div>
+                </td>  
+                <td colspan = "2">
+                    <div id ="desc">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Component</th> 
+                <th>Summary</th>
+                <th>Other attributes</th>
+            </tr>
+        </thead>
+        <tbody id="svgViewBody">
+            <!-- component stuff-->
+        </tbody>
+        <!-- <tr>
+            <td>path or sumn</td>
+            <td>path data = ...</td>
+            <td>
+                3 I want this button for each component where there is more than 1 otherAttribute 
+                <button type="button" class="btn btn-secondary" onclick="showAttribute()">Show other attributes</button>
+                <button type="button" class="btn btn-secondary">Add an attribute</button>
+            </td>
+             show other attributes button with a pop up text field or div...
+        </tr> -->
+    </table>
+    <table id="svgViewStats" style="width:100%" border="1">
+    </table>
+
+    <!-- figure out how to make these pop up when a button is clicked on actual title/description -->
+    <form ref='titleform' id='titleform'>
+        <div class="form-group">
+            <label for="titleEntry">Change title using following field:</label>
+            <input type="text"  class="form-control" id="titleEntry" placeholder="Enter text here" maxlength="255">
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Change title">
+        </div>
+    </form>
+
+    <form ref='descform' id='descform'>
+        <div class="form-group">
+            <label for="descEntry">Change description using following field:</label>
+            <input type="text" class="form-control" id="descEntry" placeholder="Enter text here" maxlength="255">
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Change description">
+        </div>
+    </form>
+
+    <h7>Other attributes panel:</h7>
+    <table id="otherAttrs" style="width:100%" border="1">
+    </table>
+    <br>
+    
+    <!-- <h5>Create an SVG image</h5>
+    <div>
+        <button id="createSVG" type="button" class="btn btn-secondary">Click here for options</button>
+    </div> -->
+
+    <br>
+    <br>
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
